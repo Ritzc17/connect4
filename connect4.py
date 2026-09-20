@@ -5,16 +5,49 @@ board = []
 for row in range(ROWS):
 	board.append([" "] * COLS)
 
+def draw_board():
+	for row in board:
+		print("|", end="")
+		for cell in row:
+			print(f" {cell} |", end="")
+		print()
+	print("  1   2   3   4   5   6   7")
+
 print("CONNECT FOUR")
 print("==============")
 
-for row in board:
-	print("|", end="")
-	for cell in row:
-		print(f" {cell} |", end="")
-	print()
+draw_board()
 
-print("  1   2   3   4   5   6   7")
+def check_winner(player):
+	for row in range(ROWS):
+		for col in range(COLS-3):
+			if (board[row][col] == player and
+				board[row][col + 1] == player and
+				board[row][col + 2] == player and
+				board[row][col + 3] == player):
+				return True
+	for row in range(ROWS-3):
+		for col in range(COLS):
+			if (board[row][col] == player and
+				board[row + 1][col] == player and
+				board[row + 2][col] == player and
+				board[row + 3][col] == player):
+				return True
+	for row in range(ROWS - 3):
+		for col in range(COLS - 3):
+			if (board[row][col] == player and
+				board[row + 1][col + 1] == player and
+				board[row + 2][col + 2] == player and
+				board[row + 3][col + 3] == player):
+				return True
+	for row in range(ROWS - 3):
+		for col in range(3, COLS):
+			if (board[row][col] == player and
+				board[row + 1][col - 1] == player and
+				board[row + 2][col - 2] == player and
+				board[row + 3][col - 3] == player):
+				return True
+	return False
 
 current_player = "X"
 
@@ -35,16 +68,17 @@ while True:
 			board[row][column - 1] = current_player
 			piece_placed = True
 			break
+
+	if piece_placed and check_winner(current_player):
+		draw_board()
+
+		print(f"Player {current_player} wins!")
+		break
+
 	if piece_placed:
 		if current_player == "X":
 			current_player = "O"
 		else:
 			current_player = "X"
 
-	for row in board:
-		print("|", end="")
-		for cell in row:
-			print(f" {cell} |", end="")
-		print()
-
-	print("  1   2   3   4   5   6   7")
+	draw_board()
