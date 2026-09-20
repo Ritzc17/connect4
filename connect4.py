@@ -1,20 +1,21 @@
 ROWS = 6
 COLS = 7
+import os
 
 board = []
 for row in range(ROWS):
 	board.append([" "] * COLS)
 
 def draw_board():
+	os.system("clear")
+	print("CONNECT FOUR")
+	print("==============")
 	for row in board:
 		print("|", end="")
 		for cell in row:
 			print(f" {cell} |", end="")
 		print()
 	print("  1   2   3   4   5   6   7")
-
-print("CONNECT FOUR")
-print("==============")
 
 draw_board()
 
@@ -71,14 +72,20 @@ while True:
 
 	if piece_placed and check_winner(current_player):
 		draw_board()
-
 		print(f"Player {current_player} wins!")
 		break
 
+	if " " not in board[0]:
+		draw_board()
+		print("It's a draw!")
+		break
+
 	if piece_placed:
+		draw_board()
+		print(f"Player {current_player} placed in column {column}!")
+
 		if current_player == "X":
 			current_player = "O"
 		else:
 			current_player = "X"
 
-	draw_board()
