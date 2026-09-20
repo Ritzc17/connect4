@@ -1,13 +1,12 @@
 ROWS = 6
 COLS = 7
-import os
 
 board = []
 for row in range(ROWS):
 	board.append([" "] * COLS)
 
 def draw_board():
-	os.system("clear")
+	print("\033[2J\033[H", end="")
 	print("CONNECT FOUR")
 	print("==============")
 	for row in board:
