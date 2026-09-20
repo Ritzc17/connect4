@@ -1,9 +1,14 @@
 ROWS = 6
 COLS = 7
 
-board = []
-for row in range(ROWS):
-	board.append([" "] * COLS)
+def create_board():
+	board = []
+
+	for row in range(ROWS):
+		board.append([" "] * COLS)
+
+	return board
+
 
 def draw_board():
 	print("\033[2J\033[H", end="")
@@ -16,7 +21,6 @@ def draw_board():
 		print()
 	print("  1   2   3   4   5   6   7")
 
-draw_board()
 
 def check_winner(player):
 	for row in range(ROWS):
@@ -49,42 +53,51 @@ def check_winner(player):
 				return True
 	return False
 
-current_player = "X"
-
 while True:
-	try:
-		column = int(input(f"Player {current_player}, choose a column: "))
-	except ValueError:
-		print("Please enter a number.")
-		continue
-	if column <1 or column > 7:
-		print("Please choose a column from 1 to 7.")
-		continue
+	board = create_board()
+	current_player = "X"
 
-	piece_placed = False
+	draw_board()
 
-	for row in range(ROWS - 1, -1, -1):
-		if board[row][column - 1] == " ":
-			board[row][column - 1] = current_player
-			piece_placed = True
+	while True:
+		try:
+			column = int(input(f"Player {current_player}, choose a column: "))
+		except ValueError:
+			print("Please enter a number.")
+			continue
+		if column <1 or column > 7:
+			print("Please choose a column from 1 to 7.")
+			continue
+
+		piece_placed = False
+
+		for row in range(ROWS - 1, -1, -1):
+			if board[row][column - 1] == " ":
+				board[row][column - 1] = current_player
+				piece_placed = True
+				break
+
+		if piece_placed and check_winner(current_player):
+			draw_board()
+			print(f"Player {current_player} wins!")
 			break
 
-	if piece_placed and check_winner(current_player):
-		draw_board()
-		print(f"Player {current_player} wins!")
+		if " " not in board[0]:
+			draw_board()
+			print("It's a draw!")
+			break
+
+		if piece_placed:
+			draw_board()
+			print(f"Player {current_player} placed in column {column}!")
+
+			if current_player == "X":
+				current_player = "O"
+			else:
+				current_player = "X"
+
+	again = input("Play again? (y/n): ")
+
+	if again.lower() != "y":
 		break
-
-	if " " not in board[0]:
-		draw_board()
-		print("It's a draw!")
-		break
-
-	if piece_placed:
-		draw_board()
-		print(f"Player {current_player} placed in column {column}!")
-
-		if current_player == "X":
-			current_player = "O"
-		else:
-			current_player = "X"
 
